@@ -1,45 +1,42 @@
 from datetime import datetime
-import pandas as pd
 import requests
+import pandas as pd
+import json
+from typing import Any, List
 
 
-def write_dict(file_path):
+def write_dict(file_path: str) -> List[dict]:
     """
-    Функция преобразовывает эксель-файл в словарик
+    Функция преобразовывает эксель-файл в словарь.
     """
     wine_reviews = pd.read_excel(file_path)
     file_dict = wine_reviews.to_dict(orient='records')
     return file_dict
 
 
-#print(write_dict("..\\data\\operations.xls"))
-
-
-def get_card_num(date):
+def get_card_num(date: str) -> List[dict]:
     """
-    Функция выводит словарик с данными по каждой карте: 4 последние цифры карты, сумма операции, кэшбэк
+    Функция выводит информацию о картах: последние 4 цифры, сумма операции, кэшбэк.
     """
     cards = []
-    transactions = write_dict("..\\data\\operations.xls")
+    transactions = write_dict(date)
 
     for element in transactions:
         card_number = str(element["Номер карты"])
         card_info = {
             "Последние 4 цифры карты": card_number[-4:],
-            "Сумма операции": abs(element["Сумма операции"] / 100)
-            if element["Сумма операции"] < 0 else element["Сумма операции"] / 100, "Кэшбэк": element.get("Кэшбэк", 0)
+            "Сумма операции": abs(element["Сумма операции"] / 100) if element["Сумма операции"] < 0 else element[
+                                                                                                             "Сумма операции"] / 100,
+            "Кэшбэк": element.get("Кэшбэк", 0)
         }
         cards.append(card_info)
 
     return cards
 
 
-print(get_card_num(write_dict("..\\data\\operations.xls")))
-
-
 def welcome_message(date_time: str) -> str | None:
     """
-    Функция возвращает приветствие в зависимости от времени
+    Функция возвращает приветствие в зависимости от времени.
     """
     current_time = datetime.strptime(date_time, "%H:%M:%S")
     if 6 <= current_time.hour < 12:
@@ -52,12 +49,9 @@ def welcome_message(date_time: str) -> str | None:
         return "Доброй ночи"
 
 
-# print(welcome_message("07:33:10"))
-
-
-def top_transactions(transactions) -> list:
+def top_transactions(transactions: List[dict]) -> List[dict]:
     """
-    Функция выводит топ - 5 транзакций по сумме платежа
+    Функция выводит топ-5 транзакций по сумме платежа.
     """
     sorted_transactions = sorted(transactions, key=lambda x: x['Сумма платежа'], reverse=True)[:5]
     top_transactions_list = []
@@ -73,12 +67,9 @@ def top_transactions(transactions) -> list:
     return top_transactions_list
 
 
-# print(top_transactions(write_dict("..\\data\\operations.xls")))
-
-
-def get_currency_rates():
+def get_currency_rates() -> Any:
     """
-    Функция выводит курс валют
+    Функция выводит курсы валют.
     """
     url = 'https://www.cbr-xml-daily.ru/daily_json.js'
     response = requests.get(url)
@@ -99,28 +90,32 @@ def get_currency_rates():
         return None
 
 
-# print(get_currency_rates())
-
-
-def get_stock_prices():
+def get_stock_prices(symbol: str) -> Any:
     """
     Функция возвращает стоимость акций из S&P500.
     """
     api_key = "3R96U44IIIGFWZIJ"
-    url = f'https://www.alphavantage.co/query?function=BATCH_Global_QUOTES&symbols=AAPL,AMZN,GOOGL,MSFT,TSLA&apikey={api_key}'
-    response = requests.get(url)
+    base_url = f'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={api_key}'
+    response = requests.get(base_url)
+    data = response.json()
+    price = data['Global Quote']['05. price']
+    return price
 
-    if response.status_code == 200:
-        data = response.json()
 
-        stock_prices = []
-        for stock_data in data['Global Quote']:
-            stock = stock_data['01. symbol']
-            price = float(stock_data['05. price'])
-            stock_prices.append({"stock": stock, "price": price})
+def stocks_1() -> Any:
+    """
+    Функция возвращает json ответ, в котором есть название и цена акций
+    """
+    stocks = ['AAPL', 'AMZN', 'GOOGL', 'MSFT']
+    stock_prices = []
 
-        return {"Стоимость акций": stock_prices}
-    else:
-        return None
+    for stock in stocks:
+        price = get_stock_prices(stock)
+        stock_prices.append({"Акция": stock, "Цена": float(price)})
 
-# print(get_stock_prices())
+    json_data = json.dumps({"Цена акций": stock_prices}, indent=4)
+    parsed_json = json.loads(json_data)
+
+    pretty_json = json.dumps(parsed_json, ensure_ascii=False, indent=4)
+
+    return pretty_json
