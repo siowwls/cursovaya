@@ -3,14 +3,9 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 
-from src.utils import (
-    get_card_num,
-    get_currency_rates,
-    get_specific_stock_prices,
-    top_transactions,
-    welcome_message,
-    write_dict,
-)
+from src.utils import (get_card_num, get_currency_rates,
+                       get_specific_stock_prices, top_transactions,
+                       welcome_message, write_dict)
 
 
 class SrcUtils(unittest.TestCase):
