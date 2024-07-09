@@ -1,12 +1,16 @@
 import json
 import logging
-import pandas as pd
 from typing import Any
+
+import pandas as pd
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def search_transactions(search_string: str, file_path: str) -> Any:
+def search_transactions(
+    search_string: str, file_path="..\\data\\operations.xls"
+) -> Any:
     """
     Функция возвращает JSON-ответ со всеми транзакциями, содержащими запрос в описании или категории.
     """
@@ -21,7 +25,7 @@ def search_transactions(search_string: str, file_path: str) -> Any:
                 break
         if found:
             results.append(row.to_dict())
-    return json.dumps(results, ensure_ascыЫыыii=False)
+    return json.dumps(results, ensure_ascii=False)
 
 
-#print(search_transactions("Супермаркет", "..\\data\\operations.xls"))
+# print(search_transactions("Супермаркет", "..\\data\\operations.xls"))
