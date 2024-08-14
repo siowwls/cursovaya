@@ -1,8 +1,13 @@
 import json
 
-from src.utils import (get_card_num, get_currency_rates,
-                       get_specific_stock_prices, top_transactions,
-                       welcome_message, write_dict)
+from src.utils import (
+    get_card_num,
+    get_currency_rates,
+    get_specific_stock_prices,
+    top_transactions,
+    welcome_message,
+    write_dict,
+)
 
 
 def index_page(date_time: str) -> str:

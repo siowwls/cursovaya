@@ -1,13 +1,16 @@
 import json
 import logging
 from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
 
 import pandas as pd
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
 
-def spending_by_workday(transactions_1: pd.DataFrame, date: str = None) -> dict:
+def spending_by_workday(
+    transactions_1: pd.DataFrame, date: Optional[str] = None
+) -> Any:
     """
     Функция выводит средние траты в рабочие и выходные дни
     """

@@ -1,17 +1,23 @@
 import unittest
+from typing import Any
 from unittest.mock import Mock, patch
 
 import pandas as pd
 
-from src.utils import (get_card_num, get_currency_rates,
-                       get_specific_stock_prices, top_transactions,
-                       welcome_message, write_dict)
+from src.utils import (
+    get_card_num,
+    get_currency_rates,
+    get_specific_stock_prices,
+    top_transactions,
+    welcome_message,
+    write_dict,
+)
 
 
 class SrcUtils(unittest.TestCase):
 
     @patch("utils.pd.read_excel")
-    def test_write_dict(self, mock_read_excel):
+    def test_write_dict(self, mock_read_excel: Any) -> None:
         mock_data = {
             "Номер карты": [1234567890123456, 9876543210987654],
             "Сумма операции": [-1000, 2000],
@@ -29,7 +35,7 @@ class SrcUtils(unittest.TestCase):
         result = get_card_num()
         self.assertEqual(result, expected_result)
 
-    def test_welcome_message(self):
+    def test_welcome_message(self) -> None:
         result_morning = welcome_message("08:00:00")
         result_day = welcome_message("14:00:00")
         result_evening = welcome_message("20:00:00")
@@ -41,7 +47,7 @@ class SrcUtils(unittest.TestCase):
         self.assertEqual(result_night, "Доброй ночи")
 
     @patch("utils.write_dict")
-    def test_top_transactions(self, mock_write_dict):
+    def test_top_transactions(self, mock_write_dict: Any) -> None:
         mock_transactions = [
             {
                 "Дата платежа": "01.06.2022",
@@ -77,7 +83,7 @@ class SrcUtils(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     @patch("utils.requests.get")
-    def test_get_currency_rates(self, mock_requests_get):
+    def test_get_currency_rates(self, mock_requests_get: Any) -> None:
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
@@ -94,7 +100,7 @@ class SrcUtils(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     @patch("utils.yf.Ticker")
-    def test_get_specific_stock_prices(self, mock_ticker):
+    def test_get_specific_stock_prices(self, mock_ticker: Any) -> None:
         mock_todays_data = Mock()
         mock_todays_data.empty = False
         mock_todays_data["High"].iloc.return_value = 500.0

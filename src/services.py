@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def search_transactions(
-    search_string: str, file_path="..\\data\\operations.xls"
+    search_string: str, file_path: str = "..\\data\\operations.xls"
 ) -> Any:
     """
     Функция возвращает JSON-ответ со всеми транзакциями, содержащими запрос в описании или категории.

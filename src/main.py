@@ -2,9 +2,14 @@ import pandas as pd
 
 from src.reports import spending_by_workday
 from src.services import search_transactions
-from src.utils import (get_card_num, get_currency_rates,
-                       get_specific_stock_prices, top_transactions,
-                       welcome_message, write_dict)
+from src.utils import (
+    get_card_num,
+    get_currency_rates,
+    get_specific_stock_prices,
+    top_transactions,
+    welcome_message,
+    write_dict,
+)
 from src.views import index_page
 
 

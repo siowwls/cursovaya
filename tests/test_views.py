@@ -1,10 +1,9 @@
 import json
 import unittest
-from unittest.mock import Mock, patch
+from typing import Any
+from unittest.mock import patch
 
-from src.utils import (get_card_num, get_currency_rates,
-                       get_specific_stock_prices, index_page, top_transactions,
-                       welcome_message, write_dict)
+from src.views import index_page
 
 
 class TestIndexPage(unittest.TestCase):
@@ -16,12 +15,12 @@ class TestIndexPage(unittest.TestCase):
     @patch("src.utils.get_specific_stock_prices")
     def test_index_page(
         self,
-        mock_get_specific_stock_prices,
-        mock_top_transactions,
-        mock_get_currency_rates,
-        mock_get_card_num,
-        mock_welcome_message,
-    ):
+        mock_get_specific_stock_prices: Any,
+        mock_top_transactions: Any,
+        mock_get_currency_rates: Any,
+        mock_get_card_num: Any,
+        mock_welcome_message: Any,
+    ) -> None:
         mock_welcome_message.return_value = "Добрый день"
         mock_get_card_num.return_value = [
             {"Последние 4 цифры карты": "3456", "Сумма операции": 10.0, "Кэшбэк": 50},

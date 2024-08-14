@@ -1,5 +1,6 @@
 import json
 import unittest
+from typing import Any
 from unittest.mock import patch
 
 import pandas as pd
@@ -10,7 +11,7 @@ from src.reports import spending_by_workday
 class TestSpendingByWorkday(unittest.TestCase):
 
     @patch("reports.pd.read_excel")
-    def test_spending_by_workday(self, mock_read_excel):
+    def test_spending_by_workday(self, mock_read_excel: Any) -> None:
         mock_data = {
             "Дата операции": [
                 "01.06.2022 12:00:00",
